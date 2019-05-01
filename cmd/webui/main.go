@@ -34,23 +34,34 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:   "static",
+		Browse: false,
+	}))
 	e.Renderer = echoview.Default()
 
 	// Routes
 	e.GET("/", func(c echo.Context) error {
 		//render with master
 		return c.Render(http.StatusOK, "index", echo.Map{
-			"title":      "APPUiO Management API",
+			"title": "APPUiO Management API",
+		})
+	})
+	e.GET("/clusters", func(c echo.Context) error {
+		//render with master
+		return c.Render(http.StatusOK, "clusters", echo.Map{
+			"title": "APPUiO Management API - Clusters",
+		})
+	})
+	e.GET("/namespaces", func(c echo.Context) error {
+		//render with master
+		return c.Render(http.StatusOK, "namespaces", echo.Map{
+			"title":      "APPUiO Management API - Namespaces",
 			"namespaces": resp.Payload,
 			"add": func(a, b int) int {
 				return a + b
 			},
 		})
-	})
-
-	e.GET("/page", func(c echo.Context) error {
-		//render only file, must full name with extension
-		return c.Render(http.StatusOK, "page.html", echo.Map{"title": "Page file title!!"})
 	})
 
 	// Start server

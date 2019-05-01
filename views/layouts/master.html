@@ -5,16 +5,34 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/webui.css">
 
         <title>{{.title}}</title>
-        {{template "head" .}}
     </head>
 
     <body>
+        <nav class="navbar navbar-dark fixed-top navbar-bg flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">APPUiO Management API</a>
+            <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+                </li>
+            </ul>
+        </nav>
+
         <div class="container-fluid">
-        {{template "content" .}}
-        <hr>
-        {{include "layouts/footer"}}
+            <div class="row">
+                {{ include "layouts/mainnav" }}
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    {{ template "content" . }}
+                </main>
+            </div>
+
+            {{ include "layouts/footer" }}
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script src="/js/webui.js"></script>
     </body>
 </html>
