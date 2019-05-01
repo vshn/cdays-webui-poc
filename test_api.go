@@ -28,5 +28,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%#v\n", resp.Payload)
+
+	//fmt.Printf("%#v\n", resp.Payload)
+
+	for _, ns := range resp.Payload {
+		fmt.Printf("%v\n", *ns.Name)
+	}
 }
