@@ -42,6 +42,9 @@ func main() {
 		return c.Render(http.StatusOK, "index", echo.Map{
 			"title":      "APPUiO Management API",
 			"namespaces": resp.Payload,
+			"add": func(a, b int) int {
+				return a + b
+			},
 		})
 	})
 
