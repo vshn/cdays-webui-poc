@@ -11,7 +11,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	"github.com/vshn/cdays-webui-poc/client/operations"
+	"github.com/vshn/cdays-webui-poc/client/namespace"
 )
 
 // Default webapi HTTP client.
@@ -57,7 +57,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Webapi {
 	cli := new(Webapi)
 	cli.Transport = transport
 
-	cli.Operations = operations.New(transport, formats)
+	cli.Namespace = namespace.New(transport, formats)
 
 	return cli
 }
@@ -103,7 +103,7 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // Webapi is a client for webapi
 type Webapi struct {
-	Operations *operations.Client
+	Namespace *namespace.Client
 
 	Transport runtime.ClientTransport
 }
@@ -112,6 +112,6 @@ type Webapi struct {
 func (c *Webapi) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 
-	c.Operations.SetTransport(transport)
+	c.Namespace.SetTransport(transport)
 
 }

@@ -16,7 +16,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
-	"github.com/vshn/cdays-webui-poc/client/operations"
+	"github.com/vshn/cdays-webui-poc/client/namespace"
 
 	httptransport "github.com/go-openapi/runtime/client"
 	apiclient "github.com/vshn/cdays-webui-poc/client"
@@ -88,7 +88,7 @@ func main() {
 		})
 	})
 	e.GET("/namespaces", func(c echo.Context) error {
-		resp, err := client.Operations.GetManagedNamespaces(operations.NewGetManagedNamespacesParams())
+		resp, err := client.Namespace.GetManagedNamespaces(namespace.NewGetManagedNamespacesParams())
 		if err != nil {
 			log.Fatal(err)
 		}

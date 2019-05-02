@@ -17,6 +17,10 @@ import (
 // swagger:model namespace
 type Namespace struct {
 
+	// description
+	// Min Length: 1
+	Description string `json:"description,omitempty"`
+
 	// name
 	// Required: true
 	// Min Length: 1
@@ -27,6 +31,10 @@ type Namespace struct {
 func (m *Namespace) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateDescription(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
@@ -34,6 +42,19 @@ func (m *Namespace) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Namespace) validateDescription(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Description) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("description", "body", string(m.Description), 1); err != nil {
+		return err
+	}
+
 	return nil
 }
 
