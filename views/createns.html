@@ -1,0 +1,24 @@
+{{ define "content" }}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Create Namespace</h1>
+    </div>
+
+    {{ if .message }}
+    <div class="alert alert-success" role="alert">
+        {{ .message }}
+    </div>
+    <a href="/namespaces"><button type="button" class="btn btn-primary">Back to Namespace listing</button></a>
+    {{ else }}
+    <form action="/createns" method="POST">
+        <div class="form-group">
+            <label for="InputNsName">Name</label>
+            <input type="text" class="form-control" id="nsName" name="nsName" placeholder="Enter Namespace Name">
+        </div>
+        <div class="form-group">
+            <label for="InputNsDescription">Description</label>
+            <input type="text" class="form-control" id="nsDescription" name="nsDescription" placeholder="Enter Namespace Description">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    {{ end }}
+{{ end }}
