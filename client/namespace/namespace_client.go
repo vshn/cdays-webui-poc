@@ -53,6 +53,34 @@ func (a *Client) CreateManagedNamespace(params *CreateManagedNamespaceParams) (*
 }
 
 /*
+DeleteManagedNamespace delete managed namespace API
+*/
+func (a *Client) DeleteManagedNamespace(params *DeleteManagedNamespaceParams) (*DeleteManagedNamespaceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteManagedNamespaceParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "deleteManagedNamespace",
+		Method:             "DELETE",
+		PathPattern:        "/namespace/{customer}/{name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{""},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &DeleteManagedNamespaceReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*DeleteManagedNamespaceOK), nil
+
+}
+
+/*
 GetManagedNamespace get managed namespace API
 */
 func (a *Client) GetManagedNamespace(params *GetManagedNamespaceParams) (*GetManagedNamespaceOK, error) {
