@@ -33,7 +33,7 @@ type appConfig struct {
 	API    string
 }
 
-func createNamespace(c echo.Context) error {
+func createNamespace(c echo.Context, client *apiclient.Webapi) error {
 	nsName := c.FormValue("nsName")
 	nsCustomer := c.FormValue("nsCustomer")
 	nsDescription := c.FormValue("nsDescription")
@@ -45,7 +45,6 @@ func createNamespace(c echo.Context) error {
 		Name:        swag.String(nsName),
 	})
 
-	client := apiclient.New(httptransport.New(config.API, "", nil), strfmt.Default)
 	_, err := client.Namespace.CreateManagedNamespace(params)
 
 	// TODO API doesnt report errors
@@ -62,9 +61,23 @@ func createNamespace(c echo.Context) error {
 	})
 }
 
-func deleteNamespace(c echo.Context) error {
+func deleteNamespace(c echo.Context, client *apiclient.Webapi) error {
 	nsName := c.Param("name")
-	msg := "Namespace " + nsName + " successfully deleted"
+
+	params := namespace.NewDeleteManagedNamespaceParams()
+	params.SetCustomer("mobiliar")
+	params.SetName(nsName)
+
+	_, err := client.Namespace.DeleteManagedNamespace(params)
+
+	// TODO API doesnt report errors
+	msg := ""
+	if err != nil {
+		msg = "Failed!"
+	} else {
+		msg = "Namespace " + nsName + " successfully deleted"
+	}
+
 	return c.Render(http.StatusOK, "nscud", echo.Map{
 		"title":   "APPUiO Management API - Deleted Namespace",
 		"message": msg,
@@ -138,8 +151,12 @@ func main() {
 			"message": nil,
 		})
 	})
-	e.POST("/nscud", createNamespace)
-	e.GET("/nscud/delete/:name", deleteNamespace)
+	e.POST("/nscud", func(c echo.Context) error {
+		return createNamespace(c, client)
+	})
+	e.GET("/nscud/delete/:name", func(c echo.Context) error {
+		return deleteNamespace(c, client)
+	})
 
 	// Start server
 	e.Logger.Fatal(e.Start(config.Listen))
