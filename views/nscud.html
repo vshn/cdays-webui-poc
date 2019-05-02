@@ -4,7 +4,7 @@
     </div>
 
     {{ if .message }}
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-{{ .messagetype }}" role="alert">
         {{ .message }}
     </div>
     <a href="/namespaces"><button type="button" class="btn btn-primary">Back to Namespace listing</button></a>

@@ -49,15 +49,19 @@ func createNamespace(c echo.Context, client *apiclient.Webapi) error {
 
 	// TODO API doesnt report errors
 	msg := ""
+	msgtype := ""
 	if err != nil {
 		msg = "Failed!"
+		msgtype = "danger"
 	} else {
 		msg = "Namespace " + nsName + " successfully created"
+		msgtype = "success"
 	}
 
 	return c.Render(http.StatusCreated, "nscud", echo.Map{
-		"title":   "APPUiO Management API - Created Namespace " + nsName,
-		"message": msg,
+		"title":       "APPUiO Management API - Created Namespace " + nsName,
+		"message":     msg,
+		"messagetype": msgtype,
 	})
 }
 
@@ -72,15 +76,19 @@ func deleteNamespace(c echo.Context, client *apiclient.Webapi) error {
 
 	// TODO API doesnt report errors
 	msg := ""
+	msgtype := ""
 	if err != nil {
 		msg = "Failed!"
+		msgtype = "danger"
 	} else {
 		msg = "Namespace " + nsName + " successfully deleted"
+		msgtype = "success"
 	}
 
 	return c.Render(http.StatusOK, "nscud", echo.Map{
-		"title":   "APPUiO Management API - Deleted Namespace",
-		"message": msg,
+		"title":       "APPUiO Management API - Deleted Namespace",
+		"message":     msg,
+		"messagetype": msgtype,
 	})
 }
 
@@ -147,8 +155,9 @@ func main() {
 	})
 	e.GET("/nscud", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "nscud", echo.Map{
-			"title":   "APPUiO Management API - Create Managed Namespace",
-			"message": nil,
+			"title":       "APPUiO Management API - Create Managed Namespace",
+			"message":     nil,
+			"messagetype": nil,
 		})
 	})
 	e.POST("/nscud", func(c echo.Context) error {
