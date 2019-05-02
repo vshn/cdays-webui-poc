@@ -3,7 +3,7 @@
         <h1 class="h2">List of Namespaces <span class="badge badge-secondary">New</span></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a href="/createns"><button type="button" class="btn btn-sm btn-outline-secondary">New Namespace</button></a>
+                <a href="/nscud"><button type="button" class="btn btn-sm btn-outline-secondary">New Namespace</button></a>
             </div>
         </div>
     </div>
@@ -14,6 +14,8 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +23,18 @@
             <tr>
                 <th scope="row">{{ call $.add $i 1 }}</th>
                 <td>{{ .Name }}</td>
+                <td>n/a</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="/editns">Edit</a>
+                            <a class="dropdown-item" href="/deletens">Delete</a>
+                        </div>
+                    </div>
+                </td>
             </tr>
     {{ end }}
         <tbody>

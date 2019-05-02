@@ -22,7 +22,7 @@ import (
 
 func createNamespace(c echo.Context) error {
 	nsName := c.FormValue("nsName")
-	return c.Render(http.StatusCreated, "createns", echo.Map{
+	return c.Render(http.StatusCreated, "nscud", echo.Map{
 		"title":   "APPUiO Management API - Created Namespace " + nsName,
 		"message": "Namespace " + nsName + " successfully created",
 	})
@@ -67,13 +67,13 @@ func main() {
 			},
 		})
 	})
-	e.GET("/createns", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "createns", echo.Map{
+	e.GET("/nscud", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "nscud", echo.Map{
 			"title":   "APPUiO Management API - Create Namespace",
 			"message": nil,
 		})
 	})
-	e.POST("/createns", createNamespace)
+	e.POST("/nscud", createNamespace)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
