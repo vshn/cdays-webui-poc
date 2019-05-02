@@ -62,6 +62,15 @@ func createNamespace(c echo.Context) error {
 	})
 }
 
+func deleteNamespace(c echo.Context) error {
+	nsName := c.Param("name")
+	msg := "Namespace " + nsName + " successfully deleted"
+	return c.Render(http.StatusOK, "nscud", echo.Map{
+		"title":   "APPUiO Management API - Deleted Namespace",
+		"message": msg,
+	})
+}
+
 func main() {
 
 	// Initiate and configure Echo
@@ -130,6 +139,7 @@ func main() {
 		})
 	})
 	e.POST("/nscud", createNamespace)
+	e.GET("/nscud/delete/:name", deleteNamespace)
 
 	// Start server
 	e.Logger.Fatal(e.Start(config.Listen))
