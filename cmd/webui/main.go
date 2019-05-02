@@ -7,6 +7,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -14,11 +15,21 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/spf13/viper"
 	"github.com/vshn/cdays-webui-poc/client/operations"
 
 	httptransport "github.com/go-openapi/runtime/client"
 	apiclient "github.com/vshn/cdays-webui-poc/client"
 )
+
+var (
+	config appConfig
+)
+
+type appConfig struct {
+	Listen string
+	API    string
+}
 
 func createNamespace(c echo.Context) error {
 	nsName := c.FormValue("nsName")
@@ -30,9 +41,6 @@ func createNamespace(c echo.Context) error {
 
 func main() {
 
-	// Setup WebAPI Client
-	client := apiclient.New(httptransport.New("127.0.0.1:8080", "", nil), strfmt.Default)
-
 	// Initiate and configure Echo
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -42,6 +50,31 @@ func main() {
 		Browse: false,
 	}))
 	e.Renderer = echoview.Default()
+
+	// Read configuration file and set defaults
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(fmt.Errorf("config file reading error: %v", err))
+	}
+
+	// unmarshal config into appConfig struct
+	err = viper.Unmarshal(&config)
+	if err != nil {
+		log.Fatal(fmt.Errorf("config file parsing error: %v", err))
+	}
+
+	if config.API == "" {
+		e.Logger.Fatal("API endpoint not configured")
+	}
+	if config.Listen == "" {
+		e.Logger.Info("listen not configured - defaulting to :1323")
+		config.Listen = ":1323"
+	}
+
+	// Setup WebAPI Client
+	client := apiclient.New(httptransport.New(config.API, "", nil), strfmt.Default)
 
 	// Routes
 	e.GET("/", func(c echo.Context) error {
@@ -76,5 +109,5 @@ func main() {
 	e.POST("/nscud", createNamespace)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(config.Listen))
 }
