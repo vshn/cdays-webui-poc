@@ -51,7 +51,7 @@ func createNamespace(c echo.Context, client *apiclient.Webapi) error {
 	msg := ""
 	msgtype := ""
 	if err != nil {
-		msg = "Failed!"
+		msg = fmt.Sprintf("Failed! %v", err)
 		msgtype = "danger"
 	} else {
 		msg = "Namespace " + nsName + " successfully created"
@@ -78,7 +78,7 @@ func deleteNamespace(c echo.Context, client *apiclient.Webapi) error {
 	msg := ""
 	msgtype := ""
 	if err != nil {
-		msg = "Failed!"
+		msg = fmt.Sprintf("Failed! %v", err)
 		msgtype = "danger"
 	} else {
 		msg = "Namespace " + nsName + " successfully deleted"
