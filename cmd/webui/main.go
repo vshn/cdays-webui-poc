@@ -13,6 +13,7 @@ import (
 
 	"github.com/foolin/goview/supports/echoview"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
@@ -20,6 +21,7 @@ import (
 
 	httptransport "github.com/go-openapi/runtime/client"
 	apiclient "github.com/vshn/cdays-webui-poc/client"
+	models "github.com/vshn/cdays-webui-poc/models"
 )
 
 var (
@@ -33,9 +35,30 @@ type appConfig struct {
 
 func createNamespace(c echo.Context) error {
 	nsName := c.FormValue("nsName")
+	nsCustomer := c.FormValue("nsCustomer")
+	nsDescription := c.FormValue("nsDescription")
+
+	params := namespace.NewCreateManagedNamespaceParams()
+	params.SetCustomer(nsCustomer)
+	params.SetBody(&models.Namespace{
+		Description: nsDescription,
+		Name:        swag.String(nsName),
+	})
+
+	client := apiclient.New(httptransport.New(config.API, "", nil), strfmt.Default)
+	_, err := client.Namespace.CreateManagedNamespace(params)
+
+	// TODO API doesnt report errors
+	msg := ""
+	if err != nil {
+		msg = "Failed!"
+	} else {
+		msg = "Namespace " + nsName + " successfully created"
+	}
+
 	return c.Render(http.StatusCreated, "nscud", echo.Map{
 		"title":   "APPUiO Management API - Created Namespace " + nsName,
-		"message": "Namespace " + nsName + " successfully created",
+		"message": msg,
 	})
 }
 
@@ -93,7 +116,7 @@ func main() {
 			log.Fatal(err)
 		}
 		return c.Render(http.StatusOK, "namespaces", echo.Map{
-			"title":      "APPUiO Management API - Namespaces",
+			"title":      "APPUiO Management API - Managed Namespaces",
 			"namespaces": resp.Payload,
 			"add": func(a, b int) int {
 				return a + b
@@ -102,7 +125,7 @@ func main() {
 	})
 	e.GET("/nscud", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "nscud", echo.Map{
-			"title":   "APPUiO Management API - Create Namespace",
+			"title":   "APPUiO Management API - Create Managed Namespace",
 			"message": nil,
 		})
 	})

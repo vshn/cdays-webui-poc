@@ -1,9 +1,9 @@
 {{define "content"}}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">List of Namespaces <span class="badge badge-secondary">New</span></h1>
+        <h1 class="h2">List of Managed Namespaces <span class="badge badge-secondary">New</span></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a href="/nscud"><button type="button" class="btn btn-sm btn-outline-secondary">New Namespace</button></a>
+                <a href="/nscud"><button type="button" class="btn btn-sm btn-outline-secondary">New Managed Namespace</button></a>
             </div>
         </div>
     </div>
@@ -13,6 +13,7 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Customer</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                     <th scope="col">Actions</th>
@@ -22,8 +23,9 @@
                  {{ range $i, $ns := .namespaces}}
                 <tr>
                     <th scope="row">{{ call $.add $i 1 }}</th>
-                    <td>{{ .Name }}</td>
                     <td>n/a</td>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .Description }}</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
