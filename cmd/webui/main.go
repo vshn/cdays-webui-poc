@@ -43,6 +43,7 @@ func createNamespace(c echo.Context, client *apiclient.Webapi) error {
 	params.SetBody(&models.Namespace{
 		Description: nsDescription,
 		Name:        swag.String(nsName),
+		Customer:    swag.String(nsCustomer),
 	})
 
 	_, err := client.Namespace.CreateManagedNamespace(params)
