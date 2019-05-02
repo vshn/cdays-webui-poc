@@ -23,7 +23,7 @@
                  {{ range $i, $ns := .namespaces}}
                 <tr>
                     <th scope="row">{{ call $.add $i 1 }}</th>
-                    <td>n/a</td>
+                    <td>{{ .Customer }}</td>
                     <td>{{ .Name }}</td>
                     <td>{{ .Description }}</td>
                     <td>
