@@ -17,6 +17,11 @@ import (
 // swagger:model namespace
 type Namespace struct {
 
+	// customer
+	// Required: true
+	// Min Length: 1
+	Customer *string `json:"customer"`
+
 	// description
 	// Min Length: 1
 	Description string `json:"description,omitempty"`
@@ -31,6 +36,10 @@ type Namespace struct {
 func (m *Namespace) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateCustomer(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
@@ -42,6 +51,19 @@ func (m *Namespace) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Namespace) validateCustomer(formats strfmt.Registry) error {
+
+	if err := validate.Required("customer", "body", m.Customer); err != nil {
+		return err
+	}
+
+	if err := validate.MinLength("customer", "body", string(*m.Customer), 1); err != nil {
+		return err
+	}
+
 	return nil
 }
 

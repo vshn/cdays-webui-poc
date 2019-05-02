@@ -136,6 +136,34 @@ func (a *Client) GetManagedNamespaces(params *GetManagedNamespacesParams) (*GetM
 
 }
 
+/*
+UpdateManagedNamespace update managed namespace API
+*/
+func (a *Client) UpdateManagedNamespace(params *UpdateManagedNamespaceParams) (*UpdateManagedNamespaceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateManagedNamespaceParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "updateManagedNamespace",
+		Method:             "POST",
+		PathPattern:        "/namespace/{customer}/{name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &UpdateManagedNamespaceReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*UpdateManagedNamespaceOK), nil
+
+}
+
 // SetTransport changes the transport on the client
 func (a *Client) SetTransport(transport runtime.ClientTransport) {
 	a.transport = transport
