@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                 {{ range $i, $ns := .namespaces}}
+                {{ range $i, $ns := .namespaces}}
                 <tr>
                     <th scope="row">{{ call $.add $i 1 }}</th>
                     <td>{{ .Customer }}</td>
@@ -32,7 +32,7 @@
                                 Actions
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/editns">Edit</a>
+                                <a class="dropdown-item" href="/nscud/update/{{ .Customer }}/{{ .Name }}">Edit</a>
                                 <a class="dropdown-item" href="/nscud/delete/{{ .Name }}">Delete</a>
                             </div>
                         </div>

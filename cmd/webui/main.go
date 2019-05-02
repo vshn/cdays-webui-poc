@@ -93,6 +93,40 @@ func deleteNamespace(c echo.Context, client *apiclient.Webapi) error {
 	})
 }
 
+func updateNamespace(c echo.Context, client *apiclient.Webapi) error {
+	nsName := c.Param("name")
+	nsCustomer := c.Param("customer")
+	nsDescription := c.FormValue("nsDescription")
+
+	params := namespace.NewUpdateManagedNamespaceParams()
+	params.SetName(nsName)
+	params.SetCustomer(nsCustomer)
+	params.SetBody(&models.Namespace{
+		Description: nsDescription,
+		Name:        swag.String(nsName),
+		Customer:    swag.String(nsCustomer),
+	})
+
+	_, err := client.Namespace.UpdateManagedNamespace(params)
+
+	// TODO API doesnt report errors
+	msg := ""
+	msgtype := ""
+	if err != nil {
+		msg = fmt.Sprintf("Failed! %v", err)
+		msgtype = "danger"
+	} else {
+		msg = "Namespace " + nsName + " successfully update"
+		msgtype = "success"
+	}
+
+	return c.Render(http.StatusOK, "nscud", echo.Map{
+		"title":       "APPUiO Management API - Updated Namespace",
+		"message":     msg,
+		"messagetype": msgtype,
+	})
+}
+
 func main() {
 
 	// Initiate and configure Echo
@@ -157,6 +191,7 @@ func main() {
 	e.GET("/nscud", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "nscud", echo.Map{
 			"title":       "APPUiO Management API - Create Managed Namespace",
+			"action":      "Create",
 			"message":     nil,
 			"messagetype": nil,
 		})
@@ -166,6 +201,26 @@ func main() {
 	})
 	e.GET("/nscud/delete/:name", func(c echo.Context) error {
 		return deleteNamespace(c, client)
+	})
+	e.GET("/nscud/update/:customer/:name", func(c echo.Context) error {
+		params := namespace.NewGetManagedNamespaceParams()
+		params.SetCustomer(c.Param("customer"))
+		params.SetName(c.Param("name"))
+		resp, err := client.Namespace.GetManagedNamespace(params)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		return c.Render(http.StatusOK, "nscud", echo.Map{
+			"title":       "APPUiO Management API - Update Managed Namespace",
+			"action":      "Update",
+			"message":     nil,
+			"messagetype": nil,
+			"namespace":   resp.Payload,
+		})
+	})
+	e.POST("/nscud/update/:customer/:name", func(c echo.Context) error {
+		return updateNamespace(c, client)
 	})
 
 	// Start server

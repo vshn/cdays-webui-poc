@@ -9,20 +9,24 @@
     </div>
     <a href="/namespaces"><button type="button" class="btn btn-primary">Back to Namespace listing</button></a>
     {{ else }}
+    {{ if eq .action "Create"}}
     <form action="/nscud" method="POST">
+    {{ else if eq .action "Update" }}
+    <form action="/nscud/update/{{ .namespace.Customer }}/{{ .namespace.Name }}" method="POST">
+    {{ end }}
         <div class="form-group">
-                <label for="InputNsCustomer">Customer</label>
-                <input type="text" class="form-control" id="nsCustomer" name="nsCustomer" placeholder="Enter Customer Name">
-            </div>
+            <label for="InputNsCustomer">Customer</label>
+            <input type="text" class="form-control" id="nsCustomer" name="nsCustomer" placeholder="Enter Customer Name" value="{{ .namespace.Customer }}" {{ if .namespace.Customer }}disabled{{ end }}>
+        </div>
         <div class="form-group">
             <label for="InputNsName">Name</label>
-            <input type="text" class="form-control" id="nsName" name="nsName" placeholder="Enter Namespace Name">
+            <input type="text" class="form-control" id="nsName" name="nsName" placeholder="Enter Namespace Name" value="{{ .namespace.Name }}" {{ if .namespace.Name }}disabled{{ end }}>
         </div>
         <div class="form-group">
             <label for="InputNsDescription">Description</label>
-            <input type="text" class="form-control" id="nsDescription" name="nsDescription" placeholder="Enter Namespace Description">
+            <input type="text" class="form-control" id="nsDescription" name="nsDescription" placeholder="Enter Namespace Description"  value="{{ .namespace.Description }}">
         </div>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">{{ .action }}</button>
     </form>
     {{ end }}
 {{ end }}
