@@ -116,7 +116,7 @@ func updateNamespace(c echo.Context, client *apiclient.Webapi) error {
 		msg = fmt.Sprintf("Failed! %v", err)
 		msgtype = "danger"
 	} else {
-		msg = "Namespace " + nsName + " successfully update"
+		msg = "Namespace " + nsName + " successfully updated"
 		msgtype = "success"
 	}
 
