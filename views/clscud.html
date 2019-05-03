@@ -1,0 +1,32 @@
+{{ define "content" }}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Cluster Management</h1>
+    </div>
+
+    {{ if .message }}
+    <div class="alert alert-{{ .messagetype }}" role="alert">
+        {{ .message }}
+    </div>
+    <a href="/clusters"><button type="button" class="btn btn-primary">Back to Cluster listing</button></a>
+    {{ else }}
+    {{ if eq .action "Create"}}
+    <form action="/clscud" method="POST">
+    {{ else if eq .action "Update" }}
+    <form action="/clscud/update/{{ .cluster.Name }}" method="POST">
+    {{ end }}
+        <div class="form-group">
+            <label for="InputClusterName">Cluster Name</label>
+            <input type="text" class="form-control" id="clusterName" name="clusterName" placeholder="Enter Cluster Name" value="{{ .cluster.Name }}">
+        </div>
+        <div class="form-group">
+            <label for="InputURL">URL</label>
+            <input type="text" class="form-control" id="clusterURL" name="clusterURL" placeholder="Enter Cluster URL" value="{{ .cluster.URL }}">
+        </div>
+        <div class="form-group">
+            <label for="InputToken">Cluster API Token</label>
+            <input type="text" class="form-control" id="clusterToken" name="clusterToken" placeholder="Enter Token" value="{{ .cluster.Token }}">
+        </div>
+        <button type="submit" class="btn btn-primary">{{ .action }}</button>
+    </form>
+    {{ end }}
+{{ end }}

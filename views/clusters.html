@@ -1,14 +1,46 @@
 {{define "content"}}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">List of Clusters</h1>
+        <h1 class="h2">List of Clusters <span class="badge badge-secondary">New</span></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                <a href="/clscud"><button type="button" class="btn btn-sm btn-outline-secondary">Register Cluster</button></a>
             </div>
         </div>
     </div>
 
-    <p>Still being implemented</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" id="theTable">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">URL</th>
+                    <th scope="col">Version</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $i, $ns := .clusters}}
+                <tr>
+                    <th scope="row">{{ call $.add $i 1 }}</th>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .URL }}</td>
+                    <td>{{ .Version }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/clscud/update/{{ .Name }}">Edit</a>
+                                <a class="dropdown-item" href="/clscud/delete/{{ .Name }}">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {{ end }}
+            <tbody>
+        </table>
+    </div>
 </div>
 {{end}}

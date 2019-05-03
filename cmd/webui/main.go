@@ -13,15 +13,16 @@ import (
 
 	"github.com/foolin/goview/supports/echoview"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
+	"github.com/vshn/cdays-webui-poc/client/cluster"
 	"github.com/vshn/cdays-webui-poc/client/namespace"
 
 	httptransport "github.com/go-openapi/runtime/client"
 	apiclient "github.com/vshn/cdays-webui-poc/client"
-	models "github.com/vshn/cdays-webui-poc/models"
+	cls "github.com/vshn/cdays-webui-poc/pkg/client/cluster"
+	ns "github.com/vshn/cdays-webui-poc/pkg/client/namespace"
 )
 
 var (
@@ -31,100 +32,6 @@ var (
 type appConfig struct {
 	Listen string
 	API    string
-}
-
-func createNamespace(c echo.Context, client *apiclient.Webapi) error {
-	nsName := c.FormValue("nsName")
-	nsCustomer := c.FormValue("nsCustomer")
-	nsDescription := c.FormValue("nsDescription")
-
-	params := namespace.NewCreateManagedNamespaceParams()
-	params.SetCustomer(nsCustomer)
-	params.SetBody(&models.Namespace{
-		Description: nsDescription,
-		Name:        swag.String(nsName),
-		Customer:    swag.String(nsCustomer),
-	})
-
-	_, err := client.Namespace.CreateManagedNamespace(params)
-
-	// TODO API doesnt report errors
-	msg := ""
-	msgtype := ""
-	if err != nil {
-		msg = fmt.Sprintf("Failed! %v", err)
-		msgtype = "danger"
-	} else {
-		msg = "Namespace " + nsName + " successfully created"
-		msgtype = "success"
-	}
-
-	return c.Render(http.StatusCreated, "nscud", echo.Map{
-		"title":       "APPUiO Management API - Created Namespace " + nsName,
-		"message":     msg,
-		"messagetype": msgtype,
-	})
-}
-
-func deleteNamespace(c echo.Context, client *apiclient.Webapi) error {
-	nsName := c.Param("name")
-
-	params := namespace.NewDeleteManagedNamespaceParams()
-	params.SetCustomer("mobiliar")
-	params.SetName(nsName)
-
-	_, err := client.Namespace.DeleteManagedNamespace(params)
-
-	// TODO API doesnt report errors
-	msg := ""
-	msgtype := ""
-	if err != nil {
-		msg = fmt.Sprintf("Failed! %v", err)
-		msgtype = "danger"
-	} else {
-		msg = "Namespace " + nsName + " successfully deleted"
-		msgtype = "success"
-	}
-
-	return c.Render(http.StatusOK, "nscud", echo.Map{
-		"title":       "APPUiO Management API - Deleted Namespace",
-		"message":     msg,
-		"messagetype": msgtype,
-	})
-}
-
-func updateNamespace(c echo.Context, client *apiclient.Webapi) error {
-	nsName := c.Param("name")
-	nsCustomer := c.Param("customer")
-	nsDescription := c.FormValue("nsDescription")
-
-	params := namespace.NewUpdateManagedNamespaceParams()
-	params.SetName(nsName)
-	params.SetCustomer(nsCustomer)
-	params.SetBody(&models.Namespace{
-		Description: nsDescription,
-		Name:        swag.String(nsName),
-		Customer:    swag.String(nsCustomer),
-	})
-
-	_, err := client.Namespace.UpdateManagedNamespace(params)
-
-	// TODO API doesnt report errors
-	msg := ""
-	msgtype := ""
-	if err != nil {
-		msg = fmt.Sprintf("Failed! %v", err)
-		msgtype = "danger"
-	} else {
-		msg = "Namespace " + nsName + " successfully updated"
-		msgtype = "success"
-	}
-
-	return c.Render(http.StatusOK, "nscud", echo.Map{
-		"title":       "APPUiO Management API - Updated Namespace",
-		"message":     msg,
-		"messagetype": msgtype,
-	})
 }
 
 func main() {
@@ -170,11 +77,34 @@ func main() {
 			"title": "APPUiO Management API",
 		})
 	})
+
+	// Cluster management routes
 	e.GET("/clusters", func(c echo.Context) error {
+		resp, err := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+		if err != nil {
+			log.Fatal(err)
+		}
 		return c.Render(http.StatusOK, "clusters", echo.Map{
-			"title": "APPUiO Management API - Clusters",
+			"title":    "APPUiO Management API - Clusters",
+			"clusters": resp.Payload,
+			"add": func(a, b int) int {
+				return a + b
+			},
 		})
 	})
+	e.GET("/clscud", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "clscud", echo.Map{
+			"title":       "APPUiO Management API - Create Managed Cluster",
+			"action":      "Create",
+			"message":     nil,
+			"messagetype": nil,
+		})
+	})
+	e.POST("/clscud", func(c echo.Context) error {
+		return cls.CreateCluster(c, client)
+	})
+
+	// Namespace management routes
 	e.GET("/namespaces", func(c echo.Context) error {
 		resp, err := client.Namespace.GetManagedNamespaces(namespace.NewGetManagedNamespacesParams())
 		if err != nil {
@@ -197,10 +127,10 @@ func main() {
 		})
 	})
 	e.POST("/nscud", func(c echo.Context) error {
-		return createNamespace(c, client)
+		return ns.CreateNamespace(c, client)
 	})
 	e.GET("/nscud/delete/:name", func(c echo.Context) error {
-		return deleteNamespace(c, client)
+		return ns.DeleteNamespace(c, client)
 	})
 	e.GET("/nscud/update/:customer/:name", func(c echo.Context) error {
 		params := namespace.NewGetManagedNamespaceParams()
@@ -220,7 +150,7 @@ func main() {
 		})
 	})
 	e.POST("/nscud/update/:customer/:name", func(c echo.Context) error {
-		return updateNamespace(c, client)
+		return ns.UpdateNamespace(c, client)
 	})
 
 	// Start server
