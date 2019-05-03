@@ -51,7 +51,7 @@ type GetManagedNamespacesOK struct {
 }
 
 func (o *GetManagedNamespacesOK) Error() string {
-	return fmt.Sprintf("[GET /namespaces][%d] getManagedNamespacesOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /{clustername}/namespaces][%d] getManagedNamespacesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetManagedNamespacesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

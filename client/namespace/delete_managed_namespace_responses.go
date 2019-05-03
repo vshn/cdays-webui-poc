@@ -51,7 +51,7 @@ type DeleteManagedNamespaceOK struct {
 }
 
 func (o *DeleteManagedNamespaceOK) Error() string {
-	return fmt.Sprintf("[DELETE /namespace/{customer}/{name}][%d] deleteManagedNamespaceOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /{clustername}/namespace/{customer}/{name}][%d] deleteManagedNamespaceOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteManagedNamespaceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

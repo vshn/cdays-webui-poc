@@ -36,7 +36,7 @@ func (a *Client) CreateManagedNamespace(params *CreateManagedNamespaceParams) (*
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "createManagedNamespace",
 		Method:             "PUT",
-		PathPattern:        "/namespace/{customer}",
+		PathPattern:        "/{clustername}/namespace/{customer}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
@@ -64,7 +64,7 @@ func (a *Client) DeleteManagedNamespace(params *DeleteManagedNamespaceParams) (*
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "deleteManagedNamespace",
 		Method:             "DELETE",
-		PathPattern:        "/namespace/{customer}/{name}",
+		PathPattern:        "/{clustername}/namespace/{customer}/{name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},
@@ -92,7 +92,7 @@ func (a *Client) GetManagedNamespace(params *GetManagedNamespaceParams) (*GetMan
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "getManagedNamespace",
 		Method:             "GET",
-		PathPattern:        "/namespace/{customer}/{name}",
+		PathPattern:        "/{clustername}/namespace/{customer}/{name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},
@@ -120,7 +120,7 @@ func (a *Client) GetManagedNamespaces(params *GetManagedNamespacesParams) (*GetM
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "getManagedNamespaces",
 		Method:             "GET",
-		PathPattern:        "/namespaces",
+		PathPattern:        "/{clustername}/namespaces",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},
@@ -148,7 +148,7 @@ func (a *Client) UpdateManagedNamespace(params *UpdateManagedNamespaceParams) (*
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "updateManagedNamespace",
 		Method:             "POST",
-		PathPattern:        "/namespace/{customer}/{name}",
+		PathPattern:        "/{clustername}/namespace/{customer}/{name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},

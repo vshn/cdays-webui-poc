@@ -61,6 +61,8 @@ for the get managed namespace operation typically these are written to a http.Re
 */
 type GetManagedNamespaceParams struct {
 
+	/*Clustername*/
+	Clustername string
 	/*Customer*/
 	Customer string
 	/*Name*/
@@ -104,6 +106,17 @@ func (o *GetManagedNamespaceParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithClustername adds the clustername to the get managed namespace params
+func (o *GetManagedNamespaceParams) WithClustername(clustername string) *GetManagedNamespaceParams {
+	o.SetClustername(clustername)
+	return o
+}
+
+// SetClustername adds the clustername to the get managed namespace params
+func (o *GetManagedNamespaceParams) SetClustername(clustername string) {
+	o.Clustername = clustername
+}
+
 // WithCustomer adds the customer to the get managed namespace params
 func (o *GetManagedNamespaceParams) WithCustomer(customer string) *GetManagedNamespaceParams {
 	o.SetCustomer(customer)
@@ -133,6 +146,11 @@ func (o *GetManagedNamespaceParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
+
+	// path param clustername
+	if err := r.SetPathParam("clustername", o.Clustername); err != nil {
+		return err
+	}
 
 	// path param customer
 	if err := r.SetPathParam("customer", o.Customer); err != nil {

@@ -61,6 +61,8 @@ for the delete managed namespace operation typically these are written to a http
 */
 type DeleteManagedNamespaceParams struct {
 
+	/*Clustername*/
+	Clustername string
 	/*Customer*/
 	Customer string
 	/*Name*/
@@ -104,6 +106,17 @@ func (o *DeleteManagedNamespaceParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithClustername adds the clustername to the delete managed namespace params
+func (o *DeleteManagedNamespaceParams) WithClustername(clustername string) *DeleteManagedNamespaceParams {
+	o.SetClustername(clustername)
+	return o
+}
+
+// SetClustername adds the clustername to the delete managed namespace params
+func (o *DeleteManagedNamespaceParams) SetClustername(clustername string) {
+	o.Clustername = clustername
+}
+
 // WithCustomer adds the customer to the delete managed namespace params
 func (o *DeleteManagedNamespaceParams) WithCustomer(customer string) *DeleteManagedNamespaceParams {
 	o.SetCustomer(customer)
@@ -133,6 +146,11 @@ func (o *DeleteManagedNamespaceParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
+
+	// path param clustername
+	if err := r.SetPathParam("clustername", o.Clustername); err != nil {
+		return err
+	}
 
 	// path param customer
 	if err := r.SetPathParam("customer", o.Customer); err != nil {

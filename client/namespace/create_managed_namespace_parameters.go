@@ -65,6 +65,8 @@ type CreateManagedNamespaceParams struct {
 
 	/*Body*/
 	Body *models.Namespace
+	/*Clustername*/
+	Clustername string
 	/*Customer*/
 	Customer string
 
@@ -117,6 +119,17 @@ func (o *CreateManagedNamespaceParams) SetBody(body *models.Namespace) {
 	o.Body = body
 }
 
+// WithClustername adds the clustername to the create managed namespace params
+func (o *CreateManagedNamespaceParams) WithClustername(clustername string) *CreateManagedNamespaceParams {
+	o.SetClustername(clustername)
+	return o
+}
+
+// SetClustername adds the clustername to the create managed namespace params
+func (o *CreateManagedNamespaceParams) SetClustername(clustername string) {
+	o.Clustername = clustername
+}
+
 // WithCustomer adds the customer to the create managed namespace params
 func (o *CreateManagedNamespaceParams) WithCustomer(customer string) *CreateManagedNamespaceParams {
 	o.SetCustomer(customer)
@@ -140,6 +153,11 @@ func (o *CreateManagedNamespaceParams) WriteToRequest(r runtime.ClientRequest, r
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
 		}
+	}
+
+	// path param clustername
+	if err := r.SetPathParam("clustername", o.Clustername); err != nil {
+		return err
 	}
 
 	// path param customer

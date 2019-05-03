@@ -20,7 +20,7 @@ import (
 // NewGetManagedNamespacesParams creates a new GetManagedNamespacesParams object
 // with the default values initialized.
 func NewGetManagedNamespacesParams() *GetManagedNamespacesParams {
-
+	var ()
 	return &GetManagedNamespacesParams{
 
 		timeout: cr.DefaultTimeout,
@@ -30,7 +30,7 @@ func NewGetManagedNamespacesParams() *GetManagedNamespacesParams {
 // NewGetManagedNamespacesParamsWithTimeout creates a new GetManagedNamespacesParams object
 // with the default values initialized, and the ability to set a timeout on a request
 func NewGetManagedNamespacesParamsWithTimeout(timeout time.Duration) *GetManagedNamespacesParams {
-
+	var ()
 	return &GetManagedNamespacesParams{
 
 		timeout: timeout,
@@ -40,7 +40,7 @@ func NewGetManagedNamespacesParamsWithTimeout(timeout time.Duration) *GetManaged
 // NewGetManagedNamespacesParamsWithContext creates a new GetManagedNamespacesParams object
 // with the default values initialized, and the ability to set a context for a request
 func NewGetManagedNamespacesParamsWithContext(ctx context.Context) *GetManagedNamespacesParams {
-
+	var ()
 	return &GetManagedNamespacesParams{
 
 		Context: ctx,
@@ -50,7 +50,7 @@ func NewGetManagedNamespacesParamsWithContext(ctx context.Context) *GetManagedNa
 // NewGetManagedNamespacesParamsWithHTTPClient creates a new GetManagedNamespacesParams object
 // with the default values initialized, and the ability to set a custom HTTPClient for a request
 func NewGetManagedNamespacesParamsWithHTTPClient(client *http.Client) *GetManagedNamespacesParams {
-
+	var ()
 	return &GetManagedNamespacesParams{
 		HTTPClient: client,
 	}
@@ -60,6 +60,10 @@ func NewGetManagedNamespacesParamsWithHTTPClient(client *http.Client) *GetManage
 for the get managed namespaces operation typically these are written to a http.Request
 */
 type GetManagedNamespacesParams struct {
+
+	/*Clustername*/
+	Clustername string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -98,6 +102,17 @@ func (o *GetManagedNamespacesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithClustername adds the clustername to the get managed namespaces params
+func (o *GetManagedNamespacesParams) WithClustername(clustername string) *GetManagedNamespacesParams {
+	o.SetClustername(clustername)
+	return o
+}
+
+// SetClustername adds the clustername to the get managed namespaces params
+func (o *GetManagedNamespacesParams) SetClustername(clustername string) {
+	o.Clustername = clustername
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetManagedNamespacesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -105,6 +120,11 @@ func (o *GetManagedNamespacesParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
+
+	// path param clustername
+	if err := r.SetPathParam("clustername", o.Clustername); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

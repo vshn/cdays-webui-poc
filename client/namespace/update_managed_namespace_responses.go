@@ -51,7 +51,7 @@ type UpdateManagedNamespaceOK struct {
 }
 
 func (o *UpdateManagedNamespaceOK) Error() string {
-	return fmt.Sprintf("[POST /namespace/{customer}/{name}][%d] updateManagedNamespaceOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /{clustername}/namespace/{customer}/{name}][%d] updateManagedNamespaceOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateManagedNamespaceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
