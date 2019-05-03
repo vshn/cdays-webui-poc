@@ -26,6 +26,10 @@
             <label for="InputNsDescription">Description</label>
             <input type="text" class="form-control" id="nsDescription" name="nsDescription" placeholder="Enter Namespace Description"  value="{{ .namespace.Description }}">
         </div>
+        <div class="form-group">
+            <label for="InputQuota">Quota</label>
+            <input type="range" class="form-control" id="quota" name="quota" max="100" value="10">
+        </div>
         <button type="submit" class="btn btn-primary">{{ .action }}</button>
     </form>
     {{ end }}
