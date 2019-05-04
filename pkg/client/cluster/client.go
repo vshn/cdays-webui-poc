@@ -42,8 +42,11 @@ func CreateCluster(c echo.Context, client *apiclient.Webapi) error {
 		msgtype = "success"
 	}
 
+	clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+
 	return c.Render(http.StatusCreated, "clscud", echo.Map{
 		"title":       "APPUiO Management API - Registered Cluster " + clusterName,
+		"clusters":    clusters.Payload,
 		"message":     msg,
 		"messagetype": msgtype,
 	})
