@@ -35,7 +35,6 @@ type appConfig struct {
 }
 
 func main() {
-
 	// Initiate and configure Echo
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -59,7 +58,6 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Errorf("config file parsing error: %v", err))
 	}
-
 	if config.API == "" {
 		e.Logger.Fatal("API endpoint not configured")
 	}
@@ -73,28 +71,29 @@ func main() {
 
 	// Routes
 	e.GET("/", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
 		return c.Render(http.StatusOK, "index", echo.Map{
-			"title": "APPUiO Management API",
+			"title":    "APPUiO Management API",
+			"clusters": clusters.Payload,
 		})
 	})
 
 	// Cluster management routes
 	e.GET("/clusters", func(c echo.Context) error {
-		resp, err := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
-		if err != nil {
-			log.Fatal(err)
-		}
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
 		return c.Render(http.StatusOK, "clusters", echo.Map{
 			"title":    "APPUiO Management API - Clusters",
-			"clusters": resp.Payload,
+			"clusters": clusters.Payload,
 			"add": func(a, b int) int {
 				return a + b
 			},
 		})
 	})
 	e.GET("/clscud", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
 		return c.Render(http.StatusOK, "clscud", echo.Map{
 			"title":       "APPUiO Management API - Create Managed Cluster",
+			"clusters":    clusters.Payload,
 			"action":      "Create",
 			"message":     nil,
 			"messagetype": nil,
@@ -105,52 +104,63 @@ func main() {
 	})
 
 	// Namespace management routes
-	e.GET("/namespaces", func(c echo.Context) error {
-		resp, err := client.Namespace.GetManagedNamespaces(namespace.NewGetManagedNamespacesParams())
-		if err != nil {
-			log.Fatal(err)
-		}
+	e.GET("/cluster/:name", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+
+		params := namespace.NewGetManagedNamespacesParams()
+		params.Clustername = c.Param("name")
+		resp, _ := client.Namespace.GetManagedNamespaces(params)
+
 		return c.Render(http.StatusOK, "namespaces", echo.Map{
 			"title":      "APPUiO Management API - Managed Namespaces",
+			"clusters":   clusters.Payload,
+			"cluster":    c.Param("name"),
 			"namespaces": resp.Payload,
 			"add": func(a, b int) int {
 				return a + b
 			},
 		})
 	})
-	e.GET("/nscud", func(c echo.Context) error {
+	e.GET("/cluster/:name/nscud", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
 		return c.Render(http.StatusOK, "nscud", echo.Map{
 			"title":       "APPUiO Management API - Create Managed Namespace",
+			"clusters":    clusters.Payload,
+			"cluster":     c.Param("name"),
 			"action":      "Create",
 			"message":     nil,
 			"messagetype": nil,
 		})
 	})
-	e.POST("/nscud", func(c echo.Context) error {
-		return ns.CreateNamespace(c, client)
+	e.POST("/cluster/:name/nscud", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+		return ns.CreateNamespace(c, client, clusters)
 	})
-	e.GET("/nscud/delete/:name", func(c echo.Context) error {
-		return ns.DeleteNamespace(c, client)
+	e.GET("/cluster/:name/nscud/delete/:customer/:nsname", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+		return ns.DeleteNamespace(c, client, clusters)
 	})
-	e.GET("/nscud/update/:customer/:name", func(c echo.Context) error {
+	e.GET("/cluster/:name/nscud/update/:customer/:nsname", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
 		params := namespace.NewGetManagedNamespaceParams()
+		params.SetClustername(c.Param(("name")))
 		params.SetCustomer(c.Param("customer"))
-		params.SetName(c.Param("name"))
-		resp, err := client.Namespace.GetManagedNamespace(params)
+		params.SetName(c.Param("nsname"))
+		resp, _ := client.Namespace.GetManagedNamespace(params)
 
-		if err != nil {
-			log.Fatal(err)
-		}
 		return c.Render(http.StatusOK, "nscud", echo.Map{
 			"title":       "APPUiO Management API - Update Managed Namespace",
+			"clusters":    clusters.Payload,
+			"cluster":     c.Param("name"),
 			"action":      "Update",
 			"message":     nil,
 			"messagetype": nil,
 			"namespace":   resp.Payload,
 		})
 	})
-	e.POST("/nscud/update/:customer/:name", func(c echo.Context) error {
-		return ns.UpdateNamespace(c, client)
+	e.POST("/cluster/:name/nscud/update/:customer/:name", func(c echo.Context) error {
+		clusters, _ := client.Cluster.GetAllClusters(cluster.NewGetAllClustersParams())
+		return ns.UpdateNamespace(c, client, clusters)
 	})
 
 	// Start server

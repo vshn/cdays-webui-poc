@@ -1,18 +1,18 @@
 {{ define "content" }}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Namespace Management</h1>
+        <h1 class="h2">Namespace Management on {{ .cluster }}</h1>
     </div>
 
     {{ if .message }}
     <div class="alert alert-{{ .messagetype }}" role="alert">
         {{ .message }}
     </div>
-    <a href="/namespaces"><button type="button" class="btn btn-primary">Back to Namespace listing</button></a>
+    <a href="/cluster/{{ .cluster }}"><button type="button" class="btn btn-primary">Back to Namespace listing</button></a>
     {{ else }}
     {{ if eq .action "Create"}}
-    <form action="/nscud" method="POST">
+    <form action="/cluster/{{ .cluster }}/nscud" method="POST">
     {{ else if eq .action "Update" }}
-    <form action="/nscud/update/{{ .namespace.Customer }}/{{ .namespace.Name }}" method="POST">
+    <form action="/cluster/{{ .cluster }}/nscud/update/{{ .namespace.Customer }}/{{ .namespace.Name }}" method="POST">
     {{ end }}
         <div class="form-group">
             <label for="InputNsCustomer">Customer</label>

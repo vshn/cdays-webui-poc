@@ -14,20 +14,23 @@
                 Customers
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/clusters">
-                <span data-feather="cloud"></span>
-                Clusters
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/namespaces">
-                <span data-feather="list"></span>
-                Managed Namespaces
-              </a>
-            </li>
           </ul>
-  
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <a class="nav-link" href="/clusters"><span>Clusters</span></a>
+              <a class="d-flex align-items-center text-muted" href="/clscud" aria-label="Register a new cluster">
+              <span data-feather="plus-circle"></span>
+            </a>
+          </h6>
+          <ul class="nav flex-column mb-2">
+            {{ range .clusters  }}
+            <li class="nav-item">
+              <a class="nav-link" href="/cluster/{{ .Name }}">
+                <span data-feather="cloud"></span>
+                {{ .Name }}
+              </a>
+            </li>
+            {{ end }}
+          </ul>
         </div>
       </nav>
   

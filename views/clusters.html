@@ -16,7 +16,6 @@
                     <th scope="col">Name</th>
                     <th scope="col">URL</th>
                     <th scope="col">Version</th>
-                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,17 +25,6 @@
                     <td>{{ .Name }}</td>
                     <td>{{ .URL }}</td>
                     <td>{{ .Version }}</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Actions
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/clscud/update/{{ .Name }}">Edit</a>
-                                <a class="dropdown-item" href="/clscud/delete/{{ .Name }}">Delete</a>
-                            </div>
-                        </div>
-                    </td>
                 </tr>
                 {{ end }}
             <tbody>

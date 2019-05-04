@@ -1,25 +1,13 @@
 {{define "content"}}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">List of Managed Namespaces</h1>
+        <h1 class="h2">Managed Namespaces on {{ .cluster }}</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a href="/nscud"><button type="button" class="btn btn-sm btn-outline-secondary">New Managed Namespace</button></a>
+                <a href="/cluster/{{ .cluster }}/nscud"><button type="button" class="btn btn-sm btn-outline-secondary">New Managed Namespace</button></a>
             </div>
         </div>
     </div>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-secondary">Cluster</button>
-        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">cdays-demo</a>
-            <a class="dropdown-item" href="#">another-cluster</a>
-            <a class="dropdown-item" href="#">test-cluster-1</a>
-        </div>
-    </div>
-    <p></p>
     <div class="table-responsive">
         <table class="table table-striped table-hover" id="theTable">
             <thead class="thead-light">
@@ -32,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                {{ range $i, $ns := .namespaces}}
+                {{ range $i, $ns := .namespaces }}
                 <tr>
                     <th scope="row">{{ call $.add $i 1 }}</th>
                     <td>{{ .Customer }}</td>
@@ -44,8 +32,8 @@
                                 Actions
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/nscud/update/{{ .Customer }}/{{ .Name }}">Edit</a>
-                                <a class="dropdown-item" href="/nscud/delete/{{ .Name }}">Delete</a>
+                                <a class="dropdown-item" href="/cluster/{{ $.cluster }}/nscud/update/{{ .Customer }}/{{ .Name }}">Edit</a>
+                                <a class="dropdown-item" href="/cluster/{{ $.cluster }}/nscud/delete/{{ .Customer }}/{{ .Name }}">Delete</a>
                             </div>
                         </div>
                     </td>
