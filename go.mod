@@ -15,7 +15,7 @@ require (
 	github.com/go-openapi/swag v0.18.0
 	github.com/go-openapi/validate v0.18.0
 	github.com/labstack/echo v3.3.10+incompatible
-	github.com/markbates/refresh v1.7.1 // indirect
+	github.com/markbates/refresh v1.8.0 // indirect
 	github.com/mattn/go-shellwords v1.0.5 // indirect
 	github.com/spf13/viper v1.3.1
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
