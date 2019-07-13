@@ -9,7 +9,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/foolin/goview v0.1.0
 	github.com/go-openapi/errors v0.19.0
-	github.com/go-openapi/runtime v0.19.0
+	github.com/go-openapi/runtime v0.19.3
 	github.com/go-openapi/spec v0.19.0
 	github.com/go-openapi/strfmt v0.19.0
 	github.com/go-openapi/swag v0.18.0
